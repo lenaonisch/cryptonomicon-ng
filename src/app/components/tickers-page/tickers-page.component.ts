@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { TickerGraphComponent } from '../ticker-graph/ticker-graph.component';
 import { TickersListComponent } from '../tickers-list/tickers-list.component';
 
 @Component({
@@ -8,6 +9,7 @@ import { TickersListComponent } from '../tickers-list/tickers-list.component';
 })
 export class TickersPageComponent implements OnInit {
   @ViewChild(TickersListComponent) tickersList: TickersListComponent | undefined;
+  @ViewChild(TickerGraphComponent) tickerGraph: TickerGraphComponent | undefined;
 
   constructor() {}
 
@@ -16,5 +18,9 @@ export class TickersPageComponent implements OnInit {
   addTicker(newName: string) {
     newName = newName.toUpperCase();
     this.tickersList?.onTickerAdd(newName);
+  }
+
+  clearGraph(name: string) {
+    this.tickerGraph?.graph = [];
   }
 }
