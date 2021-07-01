@@ -134,7 +134,7 @@
           </div>
 
           <button
-            v-on:click.stop="handleDelete(t)"
+            (click)="handleDelete(t); $event.stopPropagation();"
             class="
               flex
               items-center

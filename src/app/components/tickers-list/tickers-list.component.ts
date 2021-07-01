@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { Ticker } from 'src/app/Ticker';
 
 @Component({
@@ -7,6 +7,8 @@ import { Ticker } from 'src/app/Ticker';
   styleUrls: ['./tickers-list.component.css']
 })
 export class TickersListComponent implements OnInit {
+  @Output() tickerDeleted = new EventEmitter<string>();
+  
   page: number = 1;
   tickers: Array<Ticker> = [];
   paginatedTickers: Array<Ticker> = [];
@@ -48,6 +50,15 @@ export class TickersListComponent implements OnInit {
     } else {
       this.isTickerExists = true;
     }
+  }
+
+  handleDelete(toRemove: Ticker) {
+    clearInterval(this.tickers.find((t) => t === toRemove)?.intervalID);
+    this.tickers = this.tickers.filter((t) => t != toRemove);
+    
+    this.tickerDeleted.emit(toRemove.name);
+    
+    localStorage.setItem("watched-coins", JSON.stringify(this.tickers));
   }
 
   subscribeForUpdates(tickerName: string) {

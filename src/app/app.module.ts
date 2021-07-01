@@ -7,6 +7,7 @@ import { TickersListComponent } from './components/tickers-list/tickers-list.com
 import { IconedButtonComponent } from './components/iconed-button/iconed-button.component';
 import { TickersPageComponent } from './components/tickers-page/tickers-page.component';
 import { FormsModule } from '@angular/forms';
+import { TickerGraphComponent } from './components/ticker-graph/ticker-graph.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { FormsModule } from '@angular/forms';
     AddTickerComponent,
     TickersListComponent,
     IconedButtonComponent,
-    TickersPageComponent
+    TickersPageComponent,
+    TickerGraphComponent
   ],
   imports: [
     BrowserModule,
