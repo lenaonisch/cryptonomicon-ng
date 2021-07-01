@@ -1,0 +1,61 @@
+<section class="inline-block">
+    <div class="flex">
+      <div class="max-w-xs">
+        <label for="wallet" class="block text-sm font-medium text-gray-700"
+          >Тикер</label
+        >
+        <div class="mt-1 relative rounded-md shadow-md">
+          <input
+            [(ngModel)]="ticker"
+            (keydown.enter)="addTickerHandler(); $event.stopPropagation()"
+            (keyup)="findTips(); $event.stopPropagation()"
+            type="text"
+            name="wallet"
+            id="wallet"
+            class="
+              block
+              w-full
+              pr-10
+              border-gray-300
+              text-gray-900
+              focus:outline-none focus:ring-gray-500 focus:border-gray-500
+              sm:text-sm
+              rounded-md
+            "
+            placeholder="Например DOGE"
+            autocomplete="off"
+          />
+        </div>
+        <div class="flex bg-white shadow-md p-1 rounded-md shadow-md flex-wrap">
+          <span
+            *ngFor="let tip of tips"
+            (click)="addTickerHandler(tip)"
+            class="
+              inline-flex
+              items-center
+              px-2
+              m-1
+              rounded-md
+              text-xs
+              font-medium
+              bg-gray-300
+              text-gray-800
+              cursor-pointer
+            "
+          >
+            {{ tip }}
+          </span>
+        </div>
+        <div *ngIf="isTickerExist" class="text-sm text-red-600">
+          Такой тикер уже добавлен
+        </div>
+        <div *ngIf="isTickerAwailable" class="text-sm text-red-600">
+          Такой тикер не существует
+        </div>
+      </div>
+    </div>
+    <app-iconed-button (btnClick) = "addTickerHandler($event.value);" [iconPath]="addButtonIconPath"></app-iconed-button>
+  </section>
+  <div class="inline-block">
+    <!-- <slot name="advert" /> -->
+  </div>
