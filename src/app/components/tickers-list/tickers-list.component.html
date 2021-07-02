@@ -97,8 +97,8 @@
         <div
           *ngFor="let t of tickers"
           (click)="select(t.name)"
-          v-bind:class="{
-            'border-4': this.selectedTicker === t, //this.$store.state.selectedTicker === t,
+          [ngClass]="{
+            'border-4': (selectedTicker$ | async ) === t.name
           }"
           class="
             bg-white

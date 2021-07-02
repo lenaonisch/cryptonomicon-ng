@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { Ticker } from 'src/app/Ticker';
+import { TickerService } from 'src/app/services/ticker.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-tickers-list',
@@ -14,13 +16,15 @@ export class TickersListComponent implements OnInit {
   tickers: Array<Ticker> = [];
   paginatedTickers: Array<Ticker> = [];
   isTickerExists: boolean = false;
+  selectedTicker$: Observable<string> | null = null;
   
-  constructor() { 
+  constructor(private tickerService: TickerService) { 
     
   }
 
   ngOnInit(): void {
     this.getAddedCoins();
+    this.selectedTicker$ = this.tickerService.selectedTicker$;
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -64,22 +68,21 @@ export class TickersListComponent implements OnInit {
 
   subscribeForUpdates(tickerName: string) {
     // eslint-disable-next-line no-unused-vars
-    let intervalID = setInterval(async () => {
+    let intervalID = window.setInterval(async () => {
       console.log(tickerName);
-      // let response = await fetch(
-      //   `https://min-api.cryptocompare.com/data/price?fsym=${tickerName}&tsyms=USD&api_key=aa9434795b47744b609cbde1f458c1f0b1d0548c273327fd6c5b06209e6e9282`
-      // );
-      // const data = await response.json();
-      // let t = this.tickers.find((t) => t.name === tickerName);
-      // t.price = data.USD;
-      // t.intervalID = intervalID;
-      // if (this.selectedTicker?.name === tickerName) {
-      //   this.$refs.graphComponent.graph.push(data.USD);
-      // }
+      this.tickerService.getTickerPrice(tickerName).subscribe((response) =>{
+        let t = this.tickers.find((t) => t.name === tickerName);
+        t!.price = response.USD;
+        t!.intervalID = intervalID;
+        this.tickerService.selectedTicker$.subscribe((value) => {
+          if(value === tickerName){this.tickerService.graph?.push(response.USD)}
+        }) 
+      })
     }, 3000);
   }
 
   select(tickerName: string){
-    this.tickerSelected.emit(tickerName);
+    //this.tickerSelected.emit(tickerName);
+    this.tickerService.selectTicker(tickerName);
   }
 }

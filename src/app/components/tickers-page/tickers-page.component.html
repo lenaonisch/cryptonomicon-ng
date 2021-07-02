@@ -1,5 +1,5 @@
 <div>
   <app-add-ticker (addTicker) = "addTicker($event)"></app-add-ticker>
   <app-tickers-list (tickerDeleted)="clearGraph($event)"></app-tickers-list>
-  <app-ticker-graph *ngIf=""></app-ticker-graph>
+  <app-ticker-graph *ngIf="isGraphVisible"></app-ticker-graph>
 </div>

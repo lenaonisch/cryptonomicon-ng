@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { TickerService } from 'src/app/services/ticker.service';
 import { TickerGraphComponent } from '../ticker-graph/ticker-graph.component';
 import { TickersListComponent } from '../tickers-list/tickers-list.component';
 
@@ -11,9 +12,15 @@ export class TickersPageComponent implements OnInit {
   @ViewChild(TickersListComponent) tickersList: TickersListComponent | undefined;
   @ViewChild(TickerGraphComponent) tickerGraph: TickerGraphComponent | undefined;
 
-  constructor() {}
+  isGraphVisible: boolean = false;
 
-  ngOnInit(): void {}
+  constructor(private tickerService: TickerService) { }
+
+  ngOnInit(): void {
+    this.tickerService.selectedTicker$.subscribe((name) => {
+      this.isGraphVisible = name != '';
+    })
+  }
 
   addTicker(newName: string) {
     newName = newName.toUpperCase();

@@ -1,4 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { TickerService } from 'src/app/services/ticker.service';
 
 @Component({
   selector: 'app-ticker-graph',
@@ -6,25 +8,34 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./ticker-graph.component.css']
 })
 export class TickerGraphComponent implements OnInit {
-  @Input() tickerName: string = "";
-  graph?: Array<number> = [];
+  tickerName: string = "";
+  _subscriptions$: Subscription = new Subscription();
+  
 
-  constructor() { }
+  constructor(private tickerService: TickerService) { }
 
   ngOnInit(): void {
+    const selectedTickerSubscription = this.tickerService.selectedTicker$
+      .subscribe(name => this.tickerName = name);
+    
+    this._subscriptions$.add(selectedTickerSubscription);
+  }
+
+  ngOnDestroy(): void {
+    this._subscriptions$.unsubscribe();
   }
 
   get normalizedGraph() {
-    if (this.graph!.length > 0){
-    const min = Math.min(...this.graph!);
-    const max = Math.max(...this.graph!);
+    if (this.tickerService.graph!.length > 0){
+      const min = Math.min(...this.tickerService.graph!);
+      const max = Math.max(...this.tickerService.graph!);
 
-    return this.graph?.map((t) => 5 + ((t - min) * 95) / (max - min));
+      return this.tickerService.graph?.map((t) => 5 + ((t - min) * 95) / (max - min));
     }
     return [];
   }
 
   clear(){
-    this.graph = [];
+    this.tickerService.graph = [];
   }
 }
