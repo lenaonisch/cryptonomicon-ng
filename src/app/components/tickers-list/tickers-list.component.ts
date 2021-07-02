@@ -8,7 +8,8 @@ import { Ticker } from 'src/app/Ticker';
 })
 export class TickersListComponent implements OnInit {
   @Output() tickerDeleted = new EventEmitter<string>();
-  
+  @Output() tickerSelected = new EventEmitter<string>();
+
   page: number = 1;
   tickers: Array<Ticker> = [];
   paginatedTickers: Array<Ticker> = [];
@@ -76,5 +77,9 @@ export class TickersListComponent implements OnInit {
       //   this.$refs.graphComponent.graph.push(data.USD);
       // }
     }, 3000);
+  }
+
+  select(tickerName: string){
+    this.tickerSelected.emit(tickerName);
   }
 }

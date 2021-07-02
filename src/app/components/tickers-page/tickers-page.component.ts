@@ -21,6 +21,6 @@ export class TickersPageComponent implements OnInit {
   }
 
   clearGraph(name: string) {
-    this.tickerGraph?.graph = [];
+    this.tickerGraph?.clear();
   }
 }

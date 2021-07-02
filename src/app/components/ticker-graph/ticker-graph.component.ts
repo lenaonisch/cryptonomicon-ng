@@ -7,7 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class TickerGraphComponent implements OnInit {
   @Input() tickerName: string = "";
-  graph: Array<number> = [];
+  graph?: Array<number> = [];
 
   constructor() { }
 
@@ -15,9 +15,16 @@ export class TickerGraphComponent implements OnInit {
   }
 
   get normalizedGraph() {
-    const min = Math.min(...this.graph);
-    const max = Math.max(...this.graph);
+    if (this.graph!.length > 0){
+    const min = Math.min(...this.graph!);
+    const max = Math.max(...this.graph!);
 
-    return this.graph.map((t) => 5 + ((t - min) * 95) / (max - min));
+    return this.graph?.map((t) => 5 + ((t - min) * 95) / (max - min));
+    }
+    return [];
+  }
+
+  clear(){
+    this.graph = [];
   }
 }

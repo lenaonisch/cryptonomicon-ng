@@ -96,8 +96,7 @@
         <!-- v-bind:class="sel === t ? 'border-4' : ''"-->
         <div
           *ngFor="let t of tickers"
-          v-bind:key="t.name"
-          v-on:click="select(t)"
+          (click)="select(t.name)"
           v-bind:class="{
             'border-4': this.selectedTicker === t, //this.$store.state.selectedTicker === t,
           }"
