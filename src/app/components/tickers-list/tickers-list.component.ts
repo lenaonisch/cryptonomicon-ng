@@ -14,10 +14,39 @@ export class TickersListComponent implements OnInit {
 
   page: number = 1;
   tickers: Array<Ticker> = [];
-  paginatedTickers: Array<Ticker> = [];
+  filter: string = '';
   isTickerExists: boolean = false;
   selectedTicker$: Observable<string> | null = null;
-  
+  pageSize: number = 2;
+  get forwardPageEnabled() {
+    return this.tickers.length > (this.page - 1) * this.pageSize; //because page is increased first
+  }
+
+  get backwardPageEnabled(){
+    return this.page > 1; //because page is increased first
+  }
+
+  get filteredTickers() {
+    if (this.filter !== '') {
+      return this.tickers.filter((t) =>
+        t.name.includes(this.filter.toUpperCase())
+      );
+    }
+    return this.tickers;
+  }
+
+  get paginatedTickers() {
+    return this.filteredTickers.slice(this.startIndex, this.endIndex);
+  }
+
+  get startIndex() {
+    return (this.page - 1) * this.pageSize;
+  }
+
+  get endIndex() {
+    return this.page * this.pageSize;
+  }
+
   constructor(private tickerService: TickerService) { 
     
   }
@@ -84,5 +113,16 @@ export class TickersListComponent implements OnInit {
   select(tickerName: string){
     //this.tickerSelected.emit(tickerName);
     this.tickerService.selectTicker(tickerName);
+  }
+  onForwardClick(){
+    if (this.forwardPageEnabled) {
+      this.page++;
+    }
+  }
+
+  onBackwardClick(){
+    if (this.backwardPageEnabled) {
+      this.page--;
+    }
   }
 }

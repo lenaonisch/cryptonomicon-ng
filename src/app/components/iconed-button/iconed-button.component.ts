@@ -10,7 +10,9 @@ export class IconedButtonComponent implements OnInit {
   @Output() btnClick = new EventEmitter();
 
   @Input() iconPath: string = '';
-
+  @Input() text: string = "";
+  @Input() isEnabled: boolean = true;
+  
   constructor() {}
 
   ngOnInit(): void {}

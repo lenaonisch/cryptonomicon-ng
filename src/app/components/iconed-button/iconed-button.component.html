@@ -1,6 +1,11 @@
 <button
     (click)="onClick()"
     type="button"
+    [ngClass]="{
+      'hover:bg-gray-700': isEnabled,
+      'bg-gray-600': isEnabled,
+      'bg-gray-500': !isEnabled
+    }"
     class="
       my-4
       inline-flex
@@ -14,8 +19,6 @@
       font-medium
       rounded-full
       text-white
-      bg-gray-600
-      hover:bg-gray-700
       transition-colors
       duration-300
       focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500
@@ -34,6 +37,6 @@
         [attr.d]="iconPath"
       ></path>
     </svg>
-    Добавить
+    {{text}}
   </button>
 
