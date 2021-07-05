@@ -19,7 +19,7 @@ export class TickersListComponent implements OnInit {
   selectedTicker$: Observable<string> | null = null;
   pageSize: number = 2;
   get forwardPageEnabled() {
-    return this.tickers.length > (this.page - 1) * this.pageSize; //because page is increased first
+    return this.tickers.length / this.pageSize > (this.page) ; //because page is increased first
   }
 
   get backwardPageEnabled(){
@@ -54,16 +54,17 @@ export class TickersListComponent implements OnInit {
   ngOnInit(): void {
     this.getAddedCoins();
     this.selectedTicker$ = this.tickerService.selectedTicker$;
+    this.tickers.forEach((t) => this.subscribeForUpdates(t.name));
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    console.log(changes.prop);
-    if (this.tickers) {
-      this.tickers.forEach((t) => this.subscribeForUpdates(t.name));
-    } else {
-      this.tickers = [];
-    }
-  }
+  // ngOnChanges(changes: SimpleChanges) {
+  //   console.log(changes.prop);
+  //   if (this.tickers) {
+  //     this.tickers.forEach((t) => this.subscribeForUpdates(t.name));
+  //   } else {
+  //     this.tickers = [];
+  //   }
+  // }
 
   getAddedCoins() {
     let storedTickers = localStorage.getItem('watched-coins');
@@ -93,6 +94,10 @@ export class TickersListComponent implements OnInit {
     this.tickerDeleted.emit(toRemove.name);
     
     localStorage.setItem("watched-coins", JSON.stringify(this.tickers));
+  }
+
+  clearTickerInterval(intervalID: number | undefined){
+    clearInterval(intervalID!);
   }
 
   subscribeForUpdates(tickerName: string) {
