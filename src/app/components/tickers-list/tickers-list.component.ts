@@ -103,7 +103,7 @@ export class TickersListComponent implements OnInit {
   subscribeForUpdates(tickerName: string) {
     // eslint-disable-next-line no-unused-vars
     let intervalID = window.setInterval(async () => {
-      console.log(tickerName);
+      //console.log(tickerName);
       this.tickerService.getTickerPrice(tickerName).subscribe((response) =>{
         let t = this.tickers.find((t) => t.name === tickerName);
         t!.price = response.USD;

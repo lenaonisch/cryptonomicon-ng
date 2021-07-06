@@ -1,6 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ContentChild, TemplateRef, ContentChildren } from '@angular/core';
 import { Ticker } from 'src/app/Ticker';
 import { TickerService } from 'src/app/services/ticker.service';
+import { ConditionalAdvertComponent } from '../adverts/conditional-advert/conditional-advert.component';
 @Component({
   selector: 'app-add-ticker',
   templateUrl: './add-ticker.component.html',
@@ -8,8 +9,9 @@ import { TickerService } from 'src/app/services/ticker.service';
 })
 export class AddTickerComponent implements OnInit {
   @Input() addedCoins: Array<Ticker>;
-
+  @Input() anyElementChecked: boolean = true;
   @Output() addTicker = new EventEmitter<string>();
+  @ContentChildren(ConditionalAdvertComponent) content!: ConditionalAdvertComponent;
 
   ticker: string = "";
   availableCoins: Array<string> = [];
@@ -24,6 +26,7 @@ export class AddTickerComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    
     this.tickerService.fetchAwailableCoins().subscribe((response) => this.availableCoins = Object.keys(response.Data));
   }
 

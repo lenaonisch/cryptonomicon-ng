@@ -9,6 +9,9 @@ import { TickersListComponent } from './components/tickers-list/tickers-list.com
 import { IconedButtonComponent } from './components/iconed-button/iconed-button.component';
 import { TickersPageComponent } from './components/tickers-page/tickers-page.component';
 import { TickerGraphComponent } from './components/ticker-graph/ticker-graph.component';
+import { SimpleAdvertComponent } from './components/adverts/simple-advert/simple-advert.component';
+import { ComplexAdvertComponent } from './components/adverts/complex-advert/complex-advert.component';
+import { ConditionalAdvertComponent } from './components/adverts/conditional-advert/conditional-advert.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +20,10 @@ import { TickerGraphComponent } from './components/ticker-graph/ticker-graph.com
     TickersListComponent,
     IconedButtonComponent,
     TickersPageComponent,
-    TickerGraphComponent
+    TickerGraphComponent,
+    SimpleAdvertComponent,
+    ComplexAdvertComponent,
+    ConditionalAdvertComponent
   ],
   imports: [
     BrowserModule,

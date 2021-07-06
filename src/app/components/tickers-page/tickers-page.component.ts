@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { TickerService } from 'src/app/services/ticker.service';
+import { ConditionalAdvertComponent } from '../adverts/conditional-advert/conditional-advert.component';
 import { TickerGraphComponent } from '../ticker-graph/ticker-graph.component';
 import { TickersListComponent } from '../tickers-list/tickers-list.component';
 

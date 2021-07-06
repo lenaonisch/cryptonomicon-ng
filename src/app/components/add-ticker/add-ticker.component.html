@@ -56,6 +56,12 @@
     </div>
     <app-iconed-button (btnClick) = "addTickerHandler($event.value);" [text]="'Добавить'" [iconPath]="addButtonIconPath"></app-iconed-button>
   </section>
-  <div class="inline-block">
-    <!-- <slot name="advert" /> -->
+  <div class="simple inline-block">Simple is:
+    <ng-content select="[simple]"></ng-content>
+  </div>
+  <div class="complex inline-block">Complex is:
+    <ng-content></ng-content>
+  </div>
+  <div *ngIf="anyElementChecked" class="simple inline-block">Conditional is:
+    <ng-container *ngTemplateOutlet="content!.templateRef"></ng-container>
   </div>
