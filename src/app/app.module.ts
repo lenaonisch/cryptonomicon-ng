@@ -17,12 +17,14 @@ import { HeaderComponent } from './components/header/header.component';
 import { AboutComponent } from './components/pages/about/about.component';
 import { RouteDependentComponent } from './components/base/route-dependent/route-dependent.component';
 import { SpinnerComponent } from './components/spinner/spinner.component';
+import { UserFormComponent } from './components/pages/user-form/user-form.component';
 
 const appRoutes: Routes = [
   { path: '', component: TickersPageComponent },
   { path: 'simpleAdvert', component: SimpleAdvertComponent },
   { path: 'complexAdvert', component: ComplexAdvertComponent },
-  { path: 'about', component: AboutComponent }
+  { path: 'about', component: AboutComponent },
+  { path: 'user', component: UserFormComponent },
 ];
 
 @NgModule({
@@ -40,8 +42,15 @@ const appRoutes: Routes = [
     AboutComponent,
     RouteDependentComponent,
     SpinnerComponent,
+    UserFormComponent,
   ],
-  imports: [BrowserModule, FormsModule, HttpClientModule, RouterModule, RouterModule.forRoot(appRoutes, {enableTracing: false})],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    HttpClientModule,
+    RouterModule,
+    RouterModule.forRoot(appRoutes, { enableTracing: false }),
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })

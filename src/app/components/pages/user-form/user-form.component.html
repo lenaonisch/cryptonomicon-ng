@@ -1,0 +1,75 @@
+<div class="max-w-xs">
+  <label for="userName" class="block text-base font-medium text-gray-900"
+    >Имя<span class="text-red-600">*</span></label
+  >
+  <div class="mt-1 relative rounded-md shadow-md">
+    <input
+      [(ngModel)]="user.name"
+      type="text"
+      name="userName"
+      id="userName"
+      class="
+        block
+        w-full
+        pr-10
+        border-gray-300
+        text-gray-900
+        focus:outline-none focus:ring-gray-500 focus:border-gray-500
+        sm:text-sm
+        rounded-md
+      "
+      placeholder="Вася Пупкин"
+      autocomplete="off"
+      required
+    />
+  </div>
+
+  <label for="DOB" class="block text-base font-medium text-gray-900">ДР</label>
+  <div class="mt-1 relative rounded-md shadow-md">
+    <input
+      [(ngModel)]="user.DOB"
+      type="date"
+      name="DOB"
+      id="DOB"
+      class="
+        block
+        w-full
+        pr-10
+        border-gray-300
+        text-gray-900
+        focus:outline-none focus:ring-gray-500 focus:border-gray-500
+        sm:text-sm
+        rounded-md
+      "
+      autocomplete="off"
+    />
+  </div>
+  <label for="Tel" class="block text-base font-medium text-gray-900"
+    >Telephone</label
+  >
+  <div class="mt-1 relative rounded-md shadow-md">
+    <input
+      #phone="ngModel"
+      [(ngModel)]="user.tel"
+      type="text"
+      name="Tel"
+      id="Tel"
+      class="
+        block
+        w-full
+        pr-10
+        border-gray-300
+        text-gray-900
+        focus:outline-none focus:ring-gray-500 focus:border-gray-500
+        sm:text-sm
+        rounded-md
+      "
+      pattern="[0-9]{10}"
+      autocomplete="off"
+    />
+    <div [hidden]="phone.valid || phone.untouched" class="alert alert-danger">
+      Некорректный телефон
+    </div>
+  </div>
+</div>
+<app-iconed-button [isEnabled]="phone.invalid!" (btnClick) = "register();" text='Зарегистрироваться'></app-iconed-button>
