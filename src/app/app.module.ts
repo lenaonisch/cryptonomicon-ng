@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { RouterModule, Routes } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { AddTickerComponent } from './components/add-ticker/add-ticker.component';
@@ -12,6 +13,15 @@ import { TickerGraphComponent } from './components/ticker-graph/ticker-graph.com
 import { SimpleAdvertComponent } from './components/adverts/simple-advert/simple-advert.component';
 import { ComplexAdvertComponent } from './components/adverts/complex-advert/complex-advert.component';
 import { ConditionalAdvertComponent } from './components/adverts/conditional-advert/conditional-advert.component';
+import { HeaderComponent } from './components/header/header.component';
+import { AboutComponent } from './components/pages/about/about.component';
+
+const appRoutes: Routes = [
+  { path: '', component: TickersPageComponent },
+  { path: 'simpleAdvert', component: SimpleAdvertComponent },
+  { path: 'complexAdvert', component: ComplexAdvertComponent },
+  { path: 'about', component: AboutComponent }
+];
 
 @NgModule({
   declarations: [
@@ -23,14 +33,12 @@ import { ConditionalAdvertComponent } from './components/adverts/conditional-adv
     TickerGraphComponent,
     SimpleAdvertComponent,
     ComplexAdvertComponent,
-    ConditionalAdvertComponent
+    ConditionalAdvertComponent,
+    HeaderComponent,
+    AboutComponent,
   ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    HttpClientModule
-  ],
+  imports: [BrowserModule, FormsModule, HttpClientModule, RouterModule, RouterModule.forRoot(appRoutes, {enableTracing: true})],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
