@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { TickerService } from 'src/app/services/ticker.service';
+import { AddTickerComponent } from '../add-ticker/add-ticker.component';
 import { ConditionalAdvertComponent } from '../adverts/conditional-advert/conditional-advert.component';
 import { TickerGraphComponent } from '../ticker-graph/ticker-graph.component';
 import { TickersListComponent } from '../tickers-list/tickers-list.component';
@@ -10,17 +11,29 @@ import { TickersListComponent } from '../tickers-list/tickers-list.component';
   styleUrls: ['./tickers-page.component.css'],
 })
 export class TickersPageComponent implements OnInit {
-  @ViewChild(TickersListComponent) tickersList: TickersListComponent | undefined;
-  @ViewChild(TickerGraphComponent) tickerGraph: TickerGraphComponent | undefined;
+  @ViewChild(TickersListComponent) tickersList:
+    | TickersListComponent
+    | undefined;
+  @ViewChild(TickerGraphComponent) tickerGraph:
+    | TickerGraphComponent
+    | undefined;
+  @ViewChild(AddTickerComponent) tickerSource: AddTickerComponent | undefined;
 
   isGraphVisible: boolean = false;
+  isSpinnerVisible: boolean = true;
 
-  constructor(private tickerService: TickerService) { }
+  constructor(private tickerService: TickerService) {}
 
   ngOnInit(): void {
     this.tickerService.selectedTicker$.subscribe((name) => {
       this.isGraphVisible = name != '';
-    })
+    });
+    this.tickerService.fetchAwailableCoins().subscribe({
+      next: () => {},
+      complete: () => {
+        this.turnOffSpinner();
+      },
+    });
   }
 
   addTicker(newName: string) {
@@ -30,5 +43,9 @@ export class TickersPageComponent implements OnInit {
 
   clearGraph(name: string) {
     this.tickerGraph?.clear();
+  }
+
+  turnOffSpinner() {
+    this.isSpinnerVisible = false;
   }
 }

@@ -16,6 +16,7 @@ import { ConditionalAdvertComponent } from './components/adverts/conditional-adv
 import { HeaderComponent } from './components/header/header.component';
 import { AboutComponent } from './components/pages/about/about.component';
 import { RouteDependentComponent } from './components/base/route-dependent/route-dependent.component';
+import { SpinnerComponent } from './components/spinner/spinner.component';
 
 const appRoutes: Routes = [
   { path: '', component: TickersPageComponent },
@@ -38,8 +39,9 @@ const appRoutes: Routes = [
     HeaderComponent,
     AboutComponent,
     RouteDependentComponent,
+    SpinnerComponent,
   ],
-  imports: [BrowserModule, FormsModule, HttpClientModule, RouterModule, RouterModule.forRoot(appRoutes, {enableTracing: true})],
+  imports: [BrowserModule, FormsModule, HttpClientModule, RouterModule, RouterModule.forRoot(appRoutes, {enableTracing: false})],
   providers: [],
   bootstrap: [AppComponent],
 })

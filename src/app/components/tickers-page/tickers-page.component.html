@@ -1,4 +1,5 @@
 <div>
+  <app-spinner *ngIf="isSpinnerVisible"></app-spinner>
   <app-add-ticker (addTicker) = "addTicker($event)">
     <app-simple-advert simple>
     </app-simple-advert>

@@ -60,7 +60,7 @@
               t.name
             }}</router-link> -->
             <a
-              (click.stop)="clearTickerInterval(t.intervalID)"
+              (click.stop)="t.intervalID!.unsubscribe()"
               :to="{ name: 'coinDetails', params: { name: t.name } }"
             >
               {{ t.name }}

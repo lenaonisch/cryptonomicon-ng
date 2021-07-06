@@ -27,6 +27,7 @@ export class TickerService {
 
   fetchAwailableCoins() {
     //return this.http.get<Response>("http://localhost:5000/getCoins");
+    setTimeout(() => {}, 2000);
     return this.http.get<Response>(`${this.url}blockchain/list?${this.apikey}`);
     //return of({Data:[{BTC:1}, {DOGE: 2}, {ABYSS: 3}]});
   }

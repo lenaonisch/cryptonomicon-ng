@@ -1,12 +1,19 @@
-import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  SimpleChanges,
+  Output,
+  EventEmitter,
+} from '@angular/core';
 import { Ticker } from 'src/app/Ticker';
 import { TickerService } from 'src/app/services/ticker.service';
-import { Observable } from 'rxjs';
+import { interval, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-tickers-list',
   templateUrl: './tickers-list.component.html',
-  styleUrls: ['./tickers-list.component.css']
+  styleUrls: ['./tickers-list.component.css'],
 })
 export class TickersListComponent implements OnInit {
   @Output() tickerDeleted = new EventEmitter<string>();
@@ -19,10 +26,10 @@ export class TickersListComponent implements OnInit {
   selectedTicker$: Observable<string> | null = null;
   pageSize: number = 2;
   get forwardPageEnabled() {
-    return this.tickers.length / this.pageSize > (this.page) ; //because page is increased first
+    return this.tickers.length / this.pageSize > this.page; //because page is increased first
   }
 
-  get backwardPageEnabled(){
+  get backwardPageEnabled() {
     return this.page > 1; //because page is increased first
   }
 
@@ -47,9 +54,7 @@ export class TickersListComponent implements OnInit {
     return this.page * this.pageSize;
   }
 
-  constructor(private tickerService: TickerService) { 
-    
-  }
+  constructor(private tickerService: TickerService) {}
 
   ngOnInit(): void {
     this.getAddedCoins();
@@ -88,46 +93,46 @@ export class TickersListComponent implements OnInit {
   }
 
   handleDelete(toRemove: Ticker) {
-    clearInterval(this.tickers.find((t) => t === toRemove)?.intervalID);
+    this.tickers.find((t) => t === toRemove)?.intervalID?.unsubscribe();
     this.tickers = this.tickers.filter((t) => t != toRemove);
-    
-    this.tickerDeleted.emit(toRemove.name);
-    
-    localStorage.setItem("watched-coins", JSON.stringify(this.tickers));
-  }
 
-  clearTickerInterval(intervalID: number | undefined){
-    clearInterval(intervalID!);
+    this.tickerDeleted.emit(toRemove.name);
+
+    localStorage.setItem('watched-coins', JSON.stringify(this.tickers));
   }
 
   subscribeForUpdates(tickerName: string) {
-    // eslint-disable-next-line no-unused-vars
-    let intervalID = window.setInterval(async () => {
-      //console.log(tickerName);
-      this.tickerService.getTickerPrice(tickerName).subscribe((response) =>{
-        let t = this.tickers.find((t) => t.name === tickerName);
+    let t = this.tickers.find((t) => t.name === tickerName);
+    const intervalID = interval(1000).subscribe((response) => {
+      this.tickerService.getTickerPrice(tickerName).subscribe((response) => {
+        console.log(response);
         t!.price = response.USD;
         t!.intervalID = intervalID;
         this.tickerService.selectedTicker$.subscribe((value) => {
-          if(value === tickerName){this.tickerService.graph?.push(response.USD)}
-        }) 
-      })
-    }, 3000);
+          if (value === tickerName) {
+            this.tickerService.graph?.push(response.USD);
+          }
+        });
+      });
+    });
   }
 
-  select(tickerName: string){
+  select(tickerName: string) {
     //this.tickerSelected.emit(tickerName);
     this.tickerService.selectTicker(tickerName);
   }
-  onForwardClick(){
+  onForwardClick() {
     if (this.forwardPageEnabled) {
       this.page++;
     }
   }
 
-  onBackwardClick(){
+  onBackwardClick() {
     if (this.backwardPageEnabled) {
       this.page--;
     }
   }
+}
+function take(): import('rxjs').OperatorFunction<number, unknown> {
+  throw new Error('Function not implemented.');
 }
