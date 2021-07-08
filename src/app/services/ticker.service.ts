@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Ticker } from 'src/app/Ticker';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, interval, Observable, of } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { IApplicationState } from '../state';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +11,7 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 export class TickerService {
   url: string = "https://min-api.cryptocompare.com/data/";
   apikey: string = "api_key=aa9434795b47744b609cbde1f458c1f0b1d0548c273327fd6c5b06209e6e9282";
-  constructor(private http:HttpClient) { }
+  constructor(private http:HttpClient, private _store: Store<IApplicationState>) { }
 
   graph?: Array<number> = [];
   private selectedTickerSource = new BehaviorSubject<string>("");

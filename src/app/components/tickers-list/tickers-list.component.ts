@@ -9,6 +9,9 @@ import {
 import { Ticker } from 'src/app/Ticker';
 import { TickerService } from 'src/app/services/ticker.service';
 import { interval, Observable } from 'rxjs';
+import { AddGraphValue, IApplicationState } from 'src/app/state';
+import { select, Store } from '@ngrx/store';
+import { IGraphState } from 'src/app/state/app.state';
 
 @Component({
   selector: 'app-tickers-list',
@@ -54,7 +57,7 @@ export class TickersListComponent implements OnInit {
     return this.page * this.pageSize;
   }
 
-  constructor(private tickerService: TickerService) {}
+  constructor(private tickerService: TickerService, private _store: Store<IApplicationState>) {}
 
   ngOnInit(): void {
     this.getAddedCoins();
@@ -110,7 +113,7 @@ export class TickersListComponent implements OnInit {
         t!.intervalID = intervalID;
         this.tickerService.selectedTicker$.subscribe((value) => {
           if (value === tickerName) {
-            this.tickerService.graph?.push(response.USD);
+            this._store.dispatch(new AddGraphValue(response.USD))
           }
         });
       });
@@ -132,7 +135,4 @@ export class TickersListComponent implements OnInit {
       this.page--;
     }
   }
-}
-function take(): import('rxjs').OperatorFunction<number, unknown> {
-  throw new Error('Function not implemented.');
 }

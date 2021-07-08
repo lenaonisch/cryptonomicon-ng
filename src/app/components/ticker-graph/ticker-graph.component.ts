@@ -1,6 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { select, Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { TickerService } from 'src/app/services/ticker.service';
+import { ClearGraph, IApplicationState } from 'src/app/state';
+import { normalizedGraph } from 'src/app/state/selectors/graph.selector';
 
 @Component({
   selector: 'app-ticker-graph',
@@ -10,10 +13,9 @@ import { TickerService } from 'src/app/services/ticker.service';
 export class TickerGraphComponent implements OnInit {
   tickerName: string = "";
   _subscriptions$: Subscription = new Subscription();
-  
+  normalizedGraph$ = this._store.pipe(select(normalizedGraph));
 
-  constructor(private tickerService: TickerService) { }
-
+  constructor(private tickerService: TickerService, private _store: Store<IApplicationState>) { }
   ngOnInit(): void {
     const selectedTickerSubscription = this.tickerService.selectedTicker$
       .subscribe(name => this.tickerName = name);
@@ -23,19 +25,9 @@ export class TickerGraphComponent implements OnInit {
 
   ngOnDestroy(): void {
     this._subscriptions$.unsubscribe();
-  }
-
-  get normalizedGraph() {
-    if (this.tickerService.graph!.length > 0){
-      const min = Math.min(...this.tickerService.graph!);
-      const max = Math.max(...this.tickerService.graph!);
-
-      return this.tickerService.graph?.map((t) => 5 + ((t - min) * 95) / (max - min));
-    }
-    return [];
-  }
+  } 
 
   clear(){
-    this.tickerService.graph = [];
+    this._store.dispatch(new ClearGraph(0));
   }
 }

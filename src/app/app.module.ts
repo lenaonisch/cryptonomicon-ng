@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
+import { StoreModule } from '@ngrx/store';
 
 import { AppComponent } from './app.component';
 import { AddTickerComponent } from './components/add-ticker/add-ticker.component';
@@ -18,6 +19,7 @@ import { AboutComponent } from './components/pages/about/about.component';
 import { RouteDependentComponent } from './components/base/route-dependent/route-dependent.component';
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { UserFormComponent } from './components/pages/user-form/user-form.component';
+import { appReducers } from './state';
 
 const appRoutes: Routes = [
   { path: '', component: TickersPageComponent },
@@ -50,6 +52,7 @@ const appRoutes: Routes = [
     HttpClientModule,
     RouterModule,
     RouterModule.forRoot(appRoutes, { enableTracing: false }),
+    StoreModule.forRoot(appReducers)
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -5,7 +5,7 @@
       </h3>
       <div class="flex items-end border-gray-600 border-b border-l h-64">
         <div
-          *ngFor="let col of normalizedGraph"
+          *ngFor="let col of (normalizedGraph$ | async)"
           [style.height] = "col? col!+'%' : 0"
           class="bg-purple-800 border w-10"
         ></div>
