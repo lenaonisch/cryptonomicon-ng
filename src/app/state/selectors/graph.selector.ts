@@ -1,4 +1,3 @@
-import { state } from '@angular/animations';
 import { createSelector } from '@ngrx/store';
 import { IApplicationState, IGraphState } from '../app.state';
 

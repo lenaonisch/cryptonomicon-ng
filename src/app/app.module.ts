@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
 
 import { AppComponent } from './app.component';
 import { AddTickerComponent } from './components/add-ticker/add-ticker.component';
@@ -20,6 +21,7 @@ import { RouteDependentComponent } from './components/base/route-dependent/route
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { UserFormComponent } from './components/pages/user-form/user-form.component';
 import { appReducers } from './state';
+import { TickerEffects } from './state/effects/ticker.effects';
 
 const appRoutes: Routes = [
   { path: '', component: TickersPageComponent },
@@ -52,7 +54,8 @@ const appRoutes: Routes = [
     HttpClientModule,
     RouterModule,
     RouterModule.forRoot(appRoutes, { enableTracing: false }),
-    StoreModule.forRoot(appReducers)
+    StoreModule.forRoot(appReducers),
+    EffectsModule.forRoot([TickerEffects])
   ],
   providers: [],
   bootstrap: [AppComponent],

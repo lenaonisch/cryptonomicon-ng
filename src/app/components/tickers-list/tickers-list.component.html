@@ -1,4 +1,4 @@
-<div *ngIf="tickers.length > 0">
+<div *ngIf="isShowTickersList">
   <hr class="w-full border-t border-gray-600 my-4" />
   <app-iconed-button
     (btnClick)="onBackwardClick()"
@@ -11,7 +11,7 @@
     (btnClick)="onForwardClick()"
     [text]="'Вперед'"
     [iconPath]="''"
-    [isEnabled]="forwardPageEnabled"
+    [isEnabled]="isForwardPageEnabled"
   ></app-iconed-button>
   <div class="max-w-xs">
     <label for="filter" class="block text-sm font-medium text-gray-700"
@@ -40,10 +40,10 @@
   <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
     <div name="coins">
       <div
-        *ngFor="let t of paginatedTickers"
+        *ngFor="let t of (paginatedTickers | async)"
         (click)="select(t.name)"
         [ngClass]="{
-          'border-4': (selectedTicker$ | async) === t.name
+          'border-4': selectedTicker === t.name
         }"
         class="
           bg-white

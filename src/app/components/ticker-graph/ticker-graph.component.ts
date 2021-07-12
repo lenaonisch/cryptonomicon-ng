@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { TickerService } from 'src/app/services/ticker.service';
 import { ClearGraph, IApplicationState } from 'src/app/state';
 import { normalizedGraph } from 'src/app/state/selectors/graph.selector';
+import { selectedTicker } from 'src/app/state/selectors/ticker.selector';
 
 @Component({
   selector: 'app-ticker-graph',
@@ -17,7 +18,7 @@ export class TickerGraphComponent implements OnInit {
 
   constructor(private tickerService: TickerService, private _store: Store<IApplicationState>) { }
   ngOnInit(): void {
-    const selectedTickerSubscription = this.tickerService.selectedTicker$
+    const selectedTickerSubscription = this._store.select(selectedTicker)
       .subscribe(name => this.tickerName = name);
     
     this._subscriptions$.add(selectedTickerSubscription);

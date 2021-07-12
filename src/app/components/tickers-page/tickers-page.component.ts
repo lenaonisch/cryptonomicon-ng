@@ -1,5 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { TickerService } from 'src/app/services/ticker.service';
+import { IApplicationState } from 'src/app/state';
+import { selectedTicker } from 'src/app/state/selectors/ticker.selector';
 import { AddTickerComponent } from '../add-ticker/add-ticker.component';
 import { ConditionalAdvertComponent } from '../adverts/conditional-advert/conditional-advert.component';
 import { TickerGraphComponent } from '../ticker-graph/ticker-graph.component';
@@ -22,10 +25,10 @@ export class TickersPageComponent implements OnInit {
   isGraphVisible: boolean = false;
   isSpinnerVisible: boolean = true;
 
-  constructor(private tickerService: TickerService) {}
+  constructor(private tickerService: TickerService, private _store: Store<IApplicationState>) {}
 
   ngOnInit(): void {
-    this.tickerService.selectedTicker$.subscribe((name) => {
+    this._store.select(selectedTicker).subscribe((name) => {
       this.isGraphVisible = name != '';
     });
     this.tickerService.fetchAwailableCoins().subscribe({
