@@ -6,8 +6,7 @@ import { Store } from '@ngrx/store';
 import {
   AddGraphValue,
   IApplicationState,
-  SelectTicker,
-  UpdateTicker,
+  selectTicker,
 } from '../state';
 import { selectedTicker } from '../state/selectors/ticker.selector';
 
@@ -27,13 +26,13 @@ export class TickerService {
   //selectedTicker$ = this._store.select(selectedTicker);// this.selectedTickerSource.asObservable();
 
   selectTicker(name: string) {
-    this._store.dispatch(new SelectTicker(name));
+    this._store.dispatch(selectTicker({name: name}));
   }
 
   getTickerPrice(tickerName: string) {
     //return this.http.get<TickeResponse>("http://localhost:5000/getrandom");
     //return this.http.get<TickeResponse>(`${this.url}price?fsym=${tickerName}&tsyms=USD&${this.apikey}`);
-    return of({ USD: Math.random() * 100 });
+    return of({ name: tickerName, USD: Math.random() * 100 });
   }
 
   fetchAwailableCoins() {
@@ -43,23 +42,23 @@ export class TickerService {
     //return of({Data:[{BTC:1}, {DOGE: 2}, {ABYSS: 3}]});
   }
 
-  subscribeForUpdates(tickerName: string) {
-    const intervalID = interval(1000).subscribe((response) => {
-      this.getTickerPrice(tickerName).subscribe((response) => {
-        console.log(response);
-        let updated = {
-          price: response.USD,
-          intervalID: intervalID,
-        } as Ticker;
-        this._store.dispatch(new UpdateTicker(updated));
-        this._store.select(selectedTicker).subscribe((value) => {
-          if (value === tickerName) {
-            this._store.dispatch(new AddGraphValue(response.USD));
-          }
-        });
-      });
-    });
-  }
+  // subscribeForUpdates(tickerName: string) {
+  //   const intervalID = interval(1000).subscribe((response) => {
+  //     this.getTickerPrice(tickerName).subscribe((response) => {
+  //       console.log(response);
+  //       let updated = {
+  //         price: response.USD,
+  //         intervalID: intervalID,
+  //       } as Ticker;
+  //       this._store.dispatch(new UpdateTicker(updated));
+  //       this._store.select(selectedTicker).subscribe((value) => {
+  //         if (value === tickerName) {
+  //           this._store.dispatch(new AddGraphValue(response.USD));
+  //         }
+  //       });
+  //     });
+  //   });
+  // }
 }
 
 class Response {

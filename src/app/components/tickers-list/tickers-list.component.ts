@@ -12,10 +12,10 @@ import { interval, Observable, Subscription } from 'rxjs';
 import { filter, skip, take } from 'rxjs/operators';
 import {
   AddGraphValue,
-  AddNewTicker,
-  DeleteTicker,
+  addNewTicker,
+  deleteTicker,
   IApplicationState,
-  SetAllTickersFromJSON,
+  setAllTickersFromJSON,
 } from 'src/app/state';
 import { select, Store } from '@ngrx/store';
 import { IGraphState, ITickersState } from 'src/app/state/app.state';
@@ -42,6 +42,15 @@ export class TickersListComponent implements OnInit {
   isForwardPageEnabled: boolean = false;
   selectedTicker: string | null = null;
   pageSize: number = 2;
+  filteredTickers: Array<Ticker> = [];
+  //   let ticker$ = this._store.select(addedTickers);
+  //   if (this.filter !== '') {
+  //     return ticker$.pipe(
+  //       filter((t, i) => t[i].name.includes(this.filter.toUpperCase()))
+  //     );
+  //   }
+  //   return ticker$;
+  // }
 
   constructor(
     private tickerService: TickerService,
@@ -58,6 +67,11 @@ export class TickersListComponent implements OnInit {
         this.selectedTicker = ticker;
       })
     );
+    this._subscriptions$.add(
+      this._store.select(addedTickers).subscribe((tickers) => {
+        this.filteredTickers = tickers;
+      })
+    );
   }
 
   get() {
@@ -68,21 +82,12 @@ export class TickersListComponent implements OnInit {
     return this.page > 1; //because page is increased first
   }
 
-  get filteredTickers() {
-    let ticker$ = this._store.select(addedTickers);
-    if (this.filter !== '') {
-      return ticker$.pipe(
-        filter((t, i) => t[i].name.includes(this.filter.toUpperCase()))
-      );
-    }
-    return ticker$;
-  }
-
   get paginatedTickers() {
-    return this.filteredTickers.pipe(
-      skip(this.startIndex),
-      take(this.pageSize)
-    );
+    return this.filteredTickers.slice(this.startIndex, this.pageSize);
+    // return this.filteredTickers.pipe(
+    //   skip(this.startIndex),
+    //   take(this.pageSize)
+    // );
   }
 
   get startIndex() {
@@ -113,12 +118,12 @@ export class TickersListComponent implements OnInit {
   
   getAddedCoins() {
     let storedTickers = localStorage.getItem('watched-coins')!;
-    this._store.dispatch(new SetAllTickersFromJSON(storedTickers));
+    this._store.dispatch(setAllTickersFromJSON({payload: storedTickers}));
   }
 
   onTickerAdd(newName: string) {
     let newTicker: Ticker = { name: newName, price: '-' };
-    this._store.dispatch(new AddNewTicker(newName));
+    this._store.dispatch(addNewTicker({name: newName})); //new AddNewTicker(newName));
     // if (this.tickers.find((t) => t.name === newName) == undefined) {
     // //   this.isTickerExists = false;
     // //   this.tickers.push(newTicker);
@@ -135,7 +140,7 @@ export class TickersListComponent implements OnInit {
 
   handleDelete(toRemove: Ticker) {
     toRemove.intervalID?.unsubscribe();
-    this._store.dispatch(new DeleteTicker(toRemove.name));
+    this._store.dispatch(deleteTicker({name: toRemove.name}));
     //this.tickers = this.tickers.filter((t) => t != toRemove);
 
     this.tickerDeleted.emit(toRemove.name);

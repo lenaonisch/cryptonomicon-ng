@@ -1,52 +1,51 @@
-import { Action } from "@ngrx/store";
-import { Ticker } from "../../Ticker";
+import { Action, createAction, props } from '@ngrx/store';
+import { Ticker } from '../../Ticker';
+import { SubscribedTicker } from '../app.state';
 
 export enum ETickerActions {
-    AddTicker = "[Ticker] Add new",
-    UpdateTicker = "[Ticker] Update",
-    SelectTicker = "[Ticker] Select",
-    DeleteTicker = "[Ticker] Delete",
-    SetAllTickersFromJSON = "[Ticker] Set ALL from JSON",
+  AddTicker = '[Ticker] Add new',
+  UpdateTicker = '[Ticker] Update',
+  TickerUpdated = '[Ticker] Updated',
+  UpdateFailed = '[Ticker] Update failed',
+  SelectTicker = '[Ticker] Select',
+  DeleteTicker = '[Ticker] Delete',
+  SetAllTickersFromJSON = '[Ticker] Set ALL from JSON',
 }
 
-export class AddNewTicker implements Action {
-    readonly type: string = ETickerActions.AddTicker;
+export const addNewTicker = createAction(
+  ETickerActions.AddTicker,
+  props<{ name: string }>()
+);
 
-    constructor(public payload: string) {
-        console.log('ACTION' + this.type);
-    }
+export const updateTicker = createAction(
+  ETickerActions.UpdateTicker,
+  props<{ updatedTicker: SubscribedTicker }>()
+);
+
+export const tickerUpdateFailed = createAction(
+  ETickerActions.UpdateFailed,
+  props<{ error: any }>()
+);
+
+export const setAllTickersFromJSON = createAction(
+  ETickerActions.SetAllTickersFromJSON,
+  props<{ payload: string }>()
+);
+
+export class TickerUpdated implements Action {
+  readonly type: string = ETickerActions.TickerUpdated;
+
+  constructor() {
+    console.log('ACTION' + this.type);
+  }
 }
 
-export class UpdateTicker implements Action {
-    readonly type: string = ETickerActions.UpdateTicker;
+export const selectTicker = createAction(
+  ETickerActions.SelectTicker,
+  props<{ name: string }>()
+);
 
-    constructor(public payload: Ticker) {
-        console.log('ACTION' + this.type);
-    }
-}
-
-export class SetAllTickersFromJSON implements Action {
-    readonly type: string = ETickerActions.SetAllTickersFromJSON;
-
-    constructor(public payload: string) {
-        console.log('ACTION' + this.type);
-    }
-}
-
-export class SelectTicker implements Action {
-    readonly type: string = ETickerActions.SelectTicker;
-
-    constructor(public payload: string) {
-        console.log('ACTION' + this.type);
-    }
-}
-
-export class DeleteTicker implements Action {
-    readonly type: string = ETickerActions.DeleteTicker;
-
-    constructor(public payload: string) {
-        console.log('ACTION' + this.type);
-    }
-}
-
-export type TickerActions = AddNewTicker| SelectTicker | DeleteTicker | UpdateTicker;
+export const deleteTicker = createAction(
+  ETickerActions.DeleteTicker,
+  props<{ name: string }>()
+);

@@ -1,40 +1,51 @@
-import { IApplicationState, initialState, ITickersState } from '../app.state';
-import { ETickerActions, TickerActions } from '../actions/ticker.actions';
+import {
+  IApplicationState,
+  initialState,
+  ITickersState,
+  SubscribedTicker,
+} from '../app.state';
+import {
+  addNewTicker,
+  deleteTicker,
+  selectTicker,
+  setAllTickersFromJSON,
+  updateTicker,
+} from '../actions/ticker.actions';
 import { Ticker } from 'src/app/Ticker';
+import { Subject } from 'rxjs';
+import { createReducer, on } from '@ngrx/store';
 
-export const tickerReducers = (
-  state = initialState.tickers,
-  action: TickerActions
-): ITickersState => {
-  let newState = {...state, tickers: state.tickers.slice()};
-  switch (action.type) {
-    case ETickerActions.AddTicker: {
-      let newName = action.payload as string;
-      let newTicker: Ticker = { name: newName, price: '-' };
-      if (state.tickers.find((t) => t.name === newName) == undefined) {
-        newState.tickers.push(newTicker);
-      }
-      break;
+export const tickerReducers = createReducer(
+  initialState.tickers,
+  on(addNewTicker, (state, { name }) => ({
+    ...state,
+    tickers: state.tickers.concat({
+      name: name,
+      price: '-',
+      kill$: new Subject(),
+    }),
+  })),
+  on(updateTicker, (state, payload) => {
+    let tickers = state.tickers.slice();
+    let index = tickers.findIndex((t) => t.name === payload.updatedTicker.name);
+    if (index > -1) {
+      tickers[index] = payload.updatedTicker;
     }
-    case ETickerActions.UpdateTicker: {
-        let newTicker: Ticker = action.payload as Ticker;
-        let index = state.tickers.findIndex((t) => t.name === newTicker.name);
-        if (index > -1) {
-          newState.tickers[index] = newTicker;
-        }
-        break;
-      }
-    case ETickerActions.DeleteTicker: {
-      newState.tickers = state.tickers.filter((t) => t.name != action.payload);
-      break;
-    }
-    case ETickerActions.SelectTicker: {
-      newState.selectedTicker = action.payload as string;
-      break;
-    }
-    case ETickerActions.SetAllTickersFromJSON: {
-      newState.tickers = JSON.parse(action.payload as string?? '[]');
-    }
-  }
-  return { ...newState };
-};
+    return {
+      ...state,
+      tickers: tickers,
+    };
+  }),
+  on(deleteTicker, (state, payload) => ({
+    ...state,
+    tickers: state.tickers.filter((t) => t.name != payload.name),
+  })),
+  on(selectTicker, (state, payload) => ({
+    ...state,
+    selectedTicker: payload.name,
+  })),
+  on(setAllTickersFromJSON, (state, payload) => ({
+    ...state,
+    tickers: JSON.parse(payload.payload ?? '[]'),
+  }))
+);
